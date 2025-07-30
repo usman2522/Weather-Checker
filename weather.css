@@ -15,6 +15,22 @@ body {
   justify-content: center;
 }
 
+/* .sunny-bg {
+  background: linear-gradient(to top, #ffe259, #ffa751);
+}
+.cloudy-bg {
+  background: linear-gradient(to top, #d7d2cc, #304352);
+}
+.rainy-bg {
+  background: linear-gradient(to top, #4e54c8, #8f94fb);
+}
+.snow-bg {
+  background: linear-gradient(to top, #e0eafc, #cfdef3);
+}
+.default-bg {
+  background: linear-gradient(135deg, #e0e7ff 0%, #f8fafc 100%);
+} */
+
 .wrapper {
   width: 100%;
   max-width: 420px;

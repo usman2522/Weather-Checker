@@ -10,6 +10,70 @@ const wrapper = document.querySelector(".wrapper"),
 const loadingElement = document.getElementById("loading");
 const overlayElement = document.getElementById("overlay");
 
+function setWeatherBackgroundFromImg() {
+  const img = document.querySelector("#popup img");
+  if (!img) return;
+  const condition = img.alt.toLowerCase();
+
+  const body = document.body;
+  body.classList.remove(
+    "sunny-bg",
+    "cloudy-bg",
+    "rainy-bg",
+    "snow-bg",
+    "default-bg"
+  );
+
+  if (condition.includes("cloudy")) {
+    body.classList.add("sunny-bg");
+  } else if (condition.includes("cloud")) {
+    body.classList.add("cloudy-bg");
+  } else if (condition.includes("rain")) {
+    body.classList.add("rainy-bg");
+  } else if (condition.includes("snow")) {
+    body.classList.add("snow-bg");
+  } else {
+    body.classList.add("default-bg");
+    console.log("default");
+  }
+}
+async function setWeatherBackgroundFromImg() {
+  const img = document.querySelector("#popup img");
+  if (!img) return;
+
+  const condition = img.alt.toLowerCase();
+  const query = encodeURIComponent(condition);
+  const ACCESS_KEY = "EwqFT4iKil71dqykgO8bs8UUGe3zItIwkv5SAz3-A08";
+
+  try {
+    const response = await fetch(
+      `https://api.unsplash.com/search/photos?query=${query}&orientation=landscape&per_page=1`,
+      {
+        headers: {
+          Authorization: `Client-ID ${ACCESS_KEY}`,
+        },
+      }
+    );
+
+    const data = await response.json();
+    if (data.results && data.results.length > 0) {
+      const imageUrl = data.results[0].urls.full;
+
+      // Set background image
+      document.body.style.backgroundImage = `url('${imageUrl}')`;
+      document.body.style.backgroundSize = "cover";
+      document.body.style.backgroundPosition = "center";
+      document.body.style.backgroundRepeat = "no-repeat";
+    } else {
+      console.log("No image found for query:", condition);
+      document.body.classList.add("default-bg");
+    }
+  } catch (err) {
+    console.error("Error fetching background image:", err);
+    document.body.classList.add("default-bg");
+  }
+}
+
 async function getWeather() {
   const cityInput = document.getElementById("cityInput").value;
   const errorMessageElement = document.getElementById("error-message");
@@ -93,6 +157,7 @@ async function getWeather() {
       // Hide loading indicator after showing data
       loadingElement.style.display = "none";
       overlayElement.style.display = "none";
+      setWeatherBackgroundFromImg();
     }, 2000); // 2 seconds for better UX
   } catch (error) {
     loadingElement.style.display = "none";
