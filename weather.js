@@ -9,6 +9,18 @@ const wrapper = document.querySelector(".wrapper"),
 
 const loadingElement = document.getElementById("loading");
 const overlayElement = document.getElementById("overlay");
+const checkWeatherBtn = document.getElementById("checkWeatherBtn");
+const cityInputField = document.getElementById("cityInput");
+const popup = document.getElementById("popup");
+
+document.getElementById("resetBtn");
+const checkAgainBtn = document.getElementById("checkAgainBtn");
+
+document.getElementById("cityInput").addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    getWeather();
+  }
+});
 
 function setWeatherBackgroundFromImg() {
   const img = document.querySelector("#popup img");
@@ -74,6 +86,43 @@ async function setWeatherBackgroundFromImg() {
   }
 }
 
+function showPopup() {
+  inputPart.style.display = "none";
+  popup.style.display = "flex";
+}
+
+function hidePopup() {
+  inputPart.style.display = "block";
+  popup.style.display = "none";
+}
+
+// Back arrow click
+arrowBack.addEventListener("click", function () {
+  hidePopup();
+});
+
+// Reset button click
+if (resetBtn) {
+  resetBtn.addEventListener("click", function () {
+    cityInputField.value = "";
+    document.getElementById("weather-info").innerHTML =
+      "<span class='numb'>_</span><span class='deg'>°</span>C";
+    document.getElementById("weather").innerHTML = "_ _";
+    document.getElementById("location").innerHTML =
+      '<i class="bx bx-map"></i> <span>_, _</span>';
+    document.querySelector(".feels .numb-2").textContent = "_";
+    document.querySelector(".humidity span").textContent = "_";
+    hidePopup();
+  });
+}
+
+// Check Again button click
+if (checkAgainBtn) {
+  checkAgainBtn.addEventListener("click", function () {
+    hidePopup();
+  });
+}
+
 async function getWeather() {
   const cityInput = document.getElementById("cityInput").value;
   const errorMessageElement = document.getElementById("error-message");
@@ -129,7 +178,7 @@ async function getWeather() {
 
     setTimeout(() => {
       if (result) {
-        document.getElementById("popup").style.display = "flex";
+        showPopup();
       }
 
       // Weather icon
